@@ -1,1 +1,2 @@
-web: gunicorn webapp.src.app:app
+web: gunicorn webapp.app:app
+api: gunicorn analysis.analyse:app
