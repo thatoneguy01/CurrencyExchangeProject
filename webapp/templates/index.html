@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script type="text/javascript" src="{{url_for('static', filename='update.js')}}"></script>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <head>
     <title>Currency Exchange Information</title>
     <meta property="og:title" content="Currency Exchange Information" />
@@ -73,6 +75,7 @@
               <select
                 id="base_currency_selector"
                 name="base_currency"
+                onchange="update()"
                 class="home-select1"
               >
               {% for curr in currencies%}
@@ -89,7 +92,9 @@
             </div>
             <span class="home-text14">to</span>
             <div class="home-container16">
-              <select id="compare_currency_selector" name="compare_currency">
+              <select id="compare_currency_selector" 
+                name="compare_currency"
+                onchange="update()">
               {% for curr in currencies%}
                 <option value={{curr}} {% if(curr == "CAD")%}selected="selected"{% endif %}>{{curr}}</option>
               {% endfor %}
@@ -107,13 +112,14 @@
               name="convert_button"
               type="button"
               class="button"
+              onclick="convert()"
             >
               Convert
             </button>
           </div>
           <div class="home-container17"></div>
           <div class="home-container18">
-            <h2 class="home-text15">Statistics:</h2>
+            <h2 class="home-text15">Statistics for <a id="stat_curr_1">USD</a> to <a id="stat_curr_2">CAD</a>:</h2>
             <div class="home-container19">
               <label class="home-text16">Start Date:</label>
               <input
@@ -135,10 +141,7 @@
               </div>
               <div class="home-container23">
                 <span>Lowest Exchange Rate:&nbsp;&nbsp;</span>
-                <span id="min_rate">
-                  <span>{{min_rate}}</span>
-                  <br />
-                </span>
+                <span id="min_rate">{{min_rate}}</span>
               </div>
               <div class="home-container24">
                 <span>Highest Exchange Rate:&nbsp; &nbsp;</span>
@@ -146,15 +149,13 @@
               </div>
               <div class="home-container25">
                 <span>Average Exchange Rate:&nbsp;&nbsp;</span>
-                <span id="mean_rate">
-                  <span>{{mean_rate}}</span>
-                  <br />
-                </span>
+                <span id="mean_rate">{{mean_rate}}</span>
               </div>
             </div>
             <img
               alt="image"
-              src="https://play.teleporthq.io/static/svg/default-img.svg"
+              id="chart_img"
+              src={{chart_url}}
               class="home-image"
             />
           </div>

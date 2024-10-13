@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, render_template, Blueprint
+from flask import Flask, send_from_directory, render_template, Blueprint
 import requests, os
 from dotenv import load_dotenv
 
@@ -13,11 +13,13 @@ bp = Blueprint('app', __name__)
 def main():
     return render_template('index.html',
                            currencies=get_currency_list(),
+                           chart_url=get_chart_url(),
                            **get_stats()
                            )
 
+
 def get_currency_list():
-    return ["USD", "CAD"]
+    #return ["USD", "CAD"]
     response = requests.get(os.getenv("ANALYSIS_BASE_URL")+"/currencies")
     if response.status_code == 200:
         return response.json()
@@ -25,12 +27,12 @@ def get_currency_list():
         return []
     
 def get_stats():
-    return {
-           'current_rate': 1.361598,
-            'min_rate': 1.361598,
-            'max_rate': 1.362088,
-            'mean_rate': (1.361598 + 1.362088)/2
-            }
+    # return {
+    #         'current_rate': 1.361598,
+    #         'min_rate': 1.361598,
+    #         'max_rate': 1.362088,
+    #         'mean_rate': (1.361598 + 1.362088)/2
+    #         }
     response = requests.get(os.getenv("ANALYSIS_BASE_URL")+"/stats/USD/CAD")
     if response.status_code == 200:
         return response.json()
@@ -38,7 +40,12 @@ def get_stats():
         return {}
     
 def get_chart_url():
-    pass
+    #return "https://play.teleporthq.io/static/svg/default-img.svg"
+    response = requests.get(os.getenv("ANALYSIS_BASE_URL")+"/chart/USD/CAD")
+    if response.status_code == 200:
+        return response.json()["chart_url"]
+    else:
+        return {}
     
 
 def create_app():
