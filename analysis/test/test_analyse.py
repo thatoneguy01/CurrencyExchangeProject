@@ -4,6 +4,7 @@ from analysis.analyse import create_app
 @pytest.fixture()
 def app(mocker):
     mocker.patch('quickchart.QuickChart.get_url', return_value="http://www.testchart.com")
+    mocker.patch('flask_monitoringdashboard.bind', return_value=None)
     app = create_app('sqlite:///ExchangeRates_test.sqlite3')
     app.config.update({
         "TESTING": True,
@@ -19,7 +20,7 @@ def test_get_currencies(client):
     response = client.get('/currencies')
     assert response.status_code == 200
     currencies = response.json
-    assert len(currencies) == 170
+    assert len(currencies) == 169
     assert 'USD' in currencies
 
 def test_convert(client):

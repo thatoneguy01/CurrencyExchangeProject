@@ -2,10 +2,11 @@ from flask import Flask, request, Blueprint, make_response
 from flask_cors import CORS
 import flask_monitoringdashboard as dashboard
 from sqlalchemy import desc
-from datetime import datetime
+from datetime import datetime, timedelta
 from model import ExchangeRates
 from quickchart import QuickChart
-from  statistics import stdev
+from statistics import stdev
+from collection.collect import main as collect_main
 
 bp = Blueprint('analysis', __name__)
 
